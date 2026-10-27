@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Nathanielcat Scripts</title>
+<style>
+  :root { color-scheme: light; --ink:#172033; --muted:#657087; --line:#e7eaf0; --soft:#f6f8fb; --accent:#2563eb; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--ink); background:#fff; line-height:1.6; }
+  a { color:inherit; }
+  .wrap { width:min(920px, 100% - 32px); margin:auto; }
+  header { border-bottom:1px solid var(--line); background:#fff; }
+  .nav { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 0; }
+  .brand { font-weight:800; letter-spacing:-.03em; font-size:1.08rem; }
+  .pill { display:inline-flex; align-items:center; justify-content:center; padding:10px 15px; border-radius:999px; text-decoration:none; font-weight:700; font-size:.92rem; }
+  .primary { background:var(--accent); color:#fff; }
+  .outline { border:1px solid var(--line); background:#fff; }
+  .hero { padding:54px 0 34px; }
+  .eyebrow { color:var(--accent); text-transform:uppercase; font-weight:800; letter-spacing:.12em; font-size:.75rem; }
+  h1 { font-size:clamp(2rem,7vw,3.5rem); letter-spacing:-.055em; line-height:1.08; margin:10px 0 14px; }
+  .lead { color:var(--muted); max-width:600px; font-size:1.05rem; margin:0 0 22px; }
+  .actions { display:flex; flex-wrap:wrap; gap:10px; }
+  .section-head { display:flex; align-items:end; justify-content:space-between; gap:12px; margin:26px 0 14px; }
+  h2 { margin:0; font-size:1.45rem; letter-spacing:-.03em; }
+  .search { width:100%; padding:13px 14px; border:1px solid var(--line); border-radius:12px; font:inherit; margin:0 0 16px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); gap:14px; padding-bottom:44px; }
+  .card { border:1px solid var(--line); border-radius:18px; padding:18px; background:#fff; }
+  .tag { display:inline-block; color:#334155; background:var(--soft); border-radius:8px; padding:4px 8px; font-size:.78rem; font-weight:700; }
+  .card h3 { margin:12px 0 7px; line-height:1.25; }
+  .card p { color:var(--muted); margin:0 0 16px; font-size:.94rem; }
+  .card-actions { display:flex; flex-wrap:wrap; gap:8px; }
+  button { cursor:pointer; font:inherit; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:10px; padding:9px 12px; font-weight:700; }
+  button:hover, .pill:hover { filter:brightness(.97); }
+  .empty { display:none; color:var(--muted); padding:18px; border:1px dashed var(--line); border-radius:12px; }
+  footer { border-top:1px solid var(--line); padding:22px 0 30px; color:var(--muted); font-size:.88rem; }
+  .modal { display:none; position:fixed; inset:0; background:rgba(15,23,42,.55); padding:18px; z-index:10; align-items:center; justify-content:center; }
+  .modal.open { display:flex; }
+  .modal-panel { width:min(720px,100%); max-height:88vh; overflow:auto; background:#fff; border-radius:18px; padding:20px; }
+  .modal-top { display:flex; justify-content:space-between; align-items:start; gap:12px; }
+  .script-text { white-space:pre-wrap; background:var(--soft); border-radius:12px; padding:16px; font-family:inherit; }
+  .note { color:var(--muted); font-size:.85rem; margin-top:12px; }
+  @media (max-width:520px) { .hero { padding-top:38px; } .nav .pill { padding:8px 11px; font-size:.82rem; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="brand">✦ Nathanielcat Scripts</div>
+    <a class="pill outline" href="https://www.youtube.com/@Nathanielcat-x6y" target="_blank" rel="noopener">Visit YouTube ↗</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Scripts • Ideas • Creator notes</div>
+    <h1>The words behind<br>the videos.</h1>
+    <p class="lead">Welcome! Browse my video scripts, read them here, or copy the text for easy reference. New scripts will be added as I publish new content.</p>
+    <div class="actions">
+      <a class="pill primary" href="#scripts">Browse scripts ↓</a>
+      <a class="pill outline" href="https://www.youtube.com/@Nathanielcat-x6y" target="_blank" rel="noopener">Watch my videos ↗</a>
+    </div>
+  </section>
+
+  <section id="scripts">
+    <div class="section-head">
+      <div><div class="eyebrow">The library</div><h2>Available scripts</h2></div>
+    </div>
+    <input class="search" id="search" type="search" placeholder="Search scripts…" aria-label="Search scripts">
+    <div class="grid" id="scriptGrid"></div>
+    <div class="empty" id="empty">No scripts found. Try another search.</div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Made for viewers of <strong>Nathanielcat</strong>. Please credit the creator if you quote or reuse a script.
+  <div class="note">This is an independent creator page, not an official YouTube product. You can visit the channel anytime; scripts are available without requiring likes or subscriptions.</div>
+  </div>
+</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-panel">
+    <div class="modal-top">
+      <div><div class="eyebrow">Full script</div><h2 id="modalTitle">Script title</h2></div>
+      <button id="closeModal" aria-label="Close script">✕</button>
+    </div>
+    <p id="modalDescription" class="lead" style="font-size:.95rem;margin:8px 0 14px;"></p>
+    <div class="script-text" id="modalScript"></div>
+    <div class="actions" style="margin-top:14px">
+      <button class="primary" id="copyScript" style="background:var(--accent);color:white;">Copy script</button>
+      <a class="pill outline" id="videoLink" href="https://www.youtube.com/@Nathanielcat-x6y" target="_blank" rel="noopener">Open YouTube ↗</a>
+    </div>
+    <p class="note" id="copyStatus" aria-live="polite"></p>
+  </div>
+</div>
+
+<script>
+/*
+HOW TO ADD YOUR OWN SCRIPTS:
+1. Find the scripts array below.
+2. Replace the example title/description/script text.
+3. To add another script, copy one whole object and add a comma between objects.
+4. Put your real YouTube video link in videoUrl.
+*/
+const scripts = [
+  {
+    title: "Welcome to My Channel",
+    category: "Channel intro",
+    description: "A sample script you can replace with your own.",
+    videoUrl: "https://www.youtube.com/@Nathanielcat-x6y",
+    script: "Hey everyone, welcome back!\\n\\nThanks for checking out my script page. This is just a sample script, so replace it with the words you use in your own video.\\n\\nIf you enjoyed the video, you can check out more content on my YouTube channel. Thanks for watching!"
+  },
+  {
+    title: "My Next Video Script",
+    category: "Coming soon",
+    description: "Add the script for your next upload here.",
+    videoUrl: "https://www.youtube.com/@Nathanielcat-x6y",
+    script: "Your script goes here.\\n\\nEdit this text in the scripts array in the HTML file, then publish the updated file."
+  }
+];
+
+const grid = document.getElementById("scriptGrid");
+const search = document.getElementById("search");
+const empty = document.getElementById("empty");
+const modal = document.getElementById("modal");
+let activeScript = null;
+
+function renderScripts() {
+  const term = search.value.trim().toLowerCase();
+  const filtered = scripts.filter(s => (s.title + " " + s.category + " " + s.description).toLowerCase().includes(term));
+  grid.innerHTML = "";
+  filtered.forEach((s) => {
+    const card = document.createElement("article");
+    card.className = "card";
+    const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = s.category;
+    const title = document.createElement("h3"); title.textContent = s.title;
+    const desc = document.createElement("p"); desc.textContent = s.description;
+    const actions = document.createElement("div"); actions.className = "card-actions";
+    const read = document.createElement("button"); read.textContent = "Read script";
+    read.addEventListener("click", () => openScript(s));
+    const watch = document.createElement("a"); watch.className = "pill outline"; watch.textContent = "Related video ↗";
+    watch.href = s.videoUrl || "https://www.youtube.com/@Nathanielcat-x6y"; watch.target = "_blank"; watch.rel = "noopener";
+    actions.append(read, watch); card.append(tag, title, desc, actions); grid.append(card);
+  });
+  empty.style.display = filtered.length ? "none" : "block";
+}
+function openScript(s) {
+  activeScript = s;
+  document.getElementById("modalTitle").textContent = s.title;
+  document.getElementById("modalDescription").textContent = s.description;
+  document.getElementById("modalScript").textContent = s.script;
+  document.getElementById("videoLink").href = s.videoUrl || "https://www.youtube.com/@Nathanielcat-x6y";
+  document.getElementById("copyStatus").textContent = "";
+  modal.classList.add("open");
+}
+function closeScript() { modal.classList.remove("open"); }
+search.addEventListener("input", renderScripts);
+document.getElementById("closeModal").addEventListener("click", closeScript);
+modal.addEventListener("click", e => { if (e.target === modal) closeScript(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeScript(); });
+document.getElementById("copyScript").addEventListener("click", async () => {
+  if (!activeScript) return;
+  const status = document.getElementById("copyStatus");
+  try {
+    await navigator.clipboard.writeText(activeScript.script);
+    status.textContent = "Script copied!";
+  } catch {
+    const area = document.createElement("textarea"); area.value = activeScript.script; document.body.append(area); area.select();
+    const ok = document.execCommand("copy"); area.remove();
+    status.textContent = ok ? "Script copied!" : "Select and copy the script text manually.";
+  }
+});
+renderScripts();
+</script>
+</body>
+</html>
